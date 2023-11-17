@@ -1,4 +1,5 @@
 package com.devstack.customerserviceapi.service.impl;
+import com.devstack.customerserviceapi.dto.OrderDto;
 import com.devstack.customerserviceapi.entity.Customer;
 
 import com.devstack.customerserviceapi.dto.CustomerDto;
@@ -7,7 +8,10 @@ import com.devstack.customerserviceapi.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,6 +19,9 @@ import java.util.Optional;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepo customerRepo;
+
+    @Autowired
+    private WebClient webClient;
 
     @Autowired
     public CustomerServiceImpl(CustomerRepo customerRepo) {
@@ -36,8 +43,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (selectedCustomer.isEmpty()){
             throw new RuntimeException("Not found!");
         }
+        findOrders(selectedCustomer.get().getId());
         return new CustomerDto(selectedCustomer.get().getId(),
                 selectedCustomer.get().getName(),selectedCustomer.get().getAddress(),
                 selectedCustomer.get().getSalary());
     }
+
+    private List<OrderDto> findOrders(Long id){
+        Mono<OrderDto> orderDtoMono = webClient.get().uri("/get-by-customer-id/" + id)
+                .retrieve().bodyToMono(OrderDto.class);
+        System.out.println(orderDtoMono.block());
+        return null;
+    }
+
 }
