@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class CustomerServiceImpl implements CustomerService {
@@ -26,5 +28,16 @@ public class CustomerServiceImpl implements CustomerService {
         );
 
         customerRepo.save(customer);
+    }
+
+    @Override
+    public CustomerDto findCustomerById(Long id) {
+        Optional<Customer> selectedCustomer = customerRepo.findById(id);
+        if (selectedCustomer.isEmpty()){
+            throw new RuntimeException("Not found!");
+        }
+        return new CustomerDto(selectedCustomer.get().getId(),
+                selectedCustomer.get().getName(),selectedCustomer.get().getAddress(),
+                selectedCustomer.get().getSalary());
     }
 }
