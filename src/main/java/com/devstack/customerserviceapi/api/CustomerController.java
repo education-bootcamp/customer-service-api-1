@@ -31,7 +31,7 @@ public class CustomerController {
     public ResponseEntity<StandardResponseEntity> findCustomerById(@PathVariable Long id){
         return new ResponseEntity<>(
                 new StandardResponseEntity(200,"customer saved!",customerService.findCustomerById(id)),
-                HttpStatus.CREATED
+                HttpStatus.OK
         );
     }
 
