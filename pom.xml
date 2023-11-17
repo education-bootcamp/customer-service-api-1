@@ -15,6 +15,7 @@
 	<description>customer management service</description>
 	<properties>
 		<java.version>11</java.version>
+		<spring.cloud.version>3.1.4</spring.cloud.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -51,9 +52,8 @@
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>4.0.4</version>
+			<version>${spring.cloud.version}</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>
